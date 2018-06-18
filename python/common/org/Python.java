@@ -955,6 +955,7 @@ public class Python {
           } catch (org.python.exceptions.AttributeError e) {
               // No __iter__ == not iterable
               throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
+          }
         }
     }
 
