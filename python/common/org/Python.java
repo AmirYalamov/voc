@@ -949,9 +949,9 @@ public class Python {
             }
         } else {
             try {
-              while (iterable != sentinel) {
-                return org.Python.iter(iterable.__next__(), sentinel);
-              }
+                while (iterable != sentinel) {
+                  return org.Python.iter(iterable.__next__(), sentinel);
+                }
             } catch (org.python.exceptions.AttributeError e) {
                 // No __iter__ == not iterable
                 throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
