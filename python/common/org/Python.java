@@ -224,7 +224,6 @@ public class Python {
     public static java.lang.String typeName(java.lang.Class cls) {
         org.python.types.Type klass = org.python.types.Type.pythonType(cls);
         java.lang.String name = null;
-
         // First look to the Type for an instance variable holding a
         // cached version of the type name.
         if (klass.PYTHON_TYPE_NAME == null) {
@@ -339,7 +338,7 @@ public class Python {
                     "The globals argument is only used to determine the context;\n" +
                     "they are not modified.  The locals argument is unused.  The fromlist\n" +
                     "should be a list of names to emulate ``from name import ...'', or an\n" +
-                    "empty list to emulate ``import name''.\n" +
+                    "eto install a suitable language package and/or debugger package since atom-ide-ui doesn't provide any language or debugger support by default.mpty list to emulate ``import name''.\n" +
                     "When importing a module from a package, note that __import__('A.B', ...)\n" +
                     "returns package A when fromlist is empty, but its submodule B when\n" +
                     "fromlist is not empty.  Level is used to determine whether to perform\n" +
@@ -949,7 +948,13 @@ public class Python {
                 throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
             }
         } else {
-            throw new org.python.exceptions.NotImplementedError("Builtin function 'iter' with callable/sentinel not implemented");
+          try {
+            while (iterable != sentinel) {
+              return org.Python.iter(iterable.__next__(), sentinel);
+            }
+          } catch (org.python.exceptions.AttributeError e) {
+              // No __iter__ == not iterable
+              throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
         }
     }
 
