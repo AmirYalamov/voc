@@ -949,29 +949,20 @@ public class Python {
             }
         } else {
             // in the case that a sentinel value is provided
+            java.util.List iterList = new java.util.ArrayList();
             try {
-                org.python.Object iter = org.Python.iter(iterable, sentinel);
-                while (iter != sentinel) {
-                    try {
-                        return iter.__next__();
-                    } catch (org.python.exceptions.StopIteration e) {
-                        break;
+                try {
+                    while (iterable != sentinel) {
+                        iterList.add(iterable.__next__());
                     }
+                } catch (org.python.exceptions.StopIteration e) {
+                    throw new org.python.exceptions.StopIteration();
                 }
             } catch (org.python.exceptions.AttributeError e) {
                 // No __iter__ == not iterable
                 throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
             }
-
-            /*try {
-                org.python.Object iter = org.Python.iter(iterable, sentinel);
-                while (iterable != sentinel) {
-
-                }
-            } catch (org.python.exceptions.AttributeError e) {
-                // No __iter__ == not iterable
-                throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
-            }*/
+            return iter(new org.python.types.List(iterList));
         }
     }
 
