@@ -948,14 +948,30 @@ public class Python {
                 throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
             }
         } else {
+            // in the case that a sentinel value is provided
             try {
-                while (iterable != sentinel) {
-                    return org.Python.iter(iterable.__next__(), sentinel);
+                org.python.Object iter = org.Python.iter(iterable, sentinel);
+                while (iter != sentinel) {
+                    try {
+                        return iter.__next__();
+                    } catch (org.python.exceptions.StopIteration e) {
+                        break;
+                    }
                 }
             } catch (org.python.exceptions.AttributeError e) {
                 // No __iter__ == not iterable
                 throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
             }
+
+            /*try {
+                org.python.Object iter = org.Python.iter(iterable, sentinel);
+                while (iterable != sentinel) {
+
+                }
+            } catch (org.python.exceptions.AttributeError e) {
+                // No __iter__ == not iterable
+                throw new org.python.exceptions.TypeError("'" + iterable.typeName() + "' object is not iterable");
+            }*/
         }
     }
 
