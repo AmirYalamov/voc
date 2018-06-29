@@ -427,21 +427,18 @@ public class Python {
 
         org.python.Object newObject = iter(object);    // makes newObject a printable version of object
         String objectString = object.toString();
-        String newString;
+        String newString = "";
 
-        while (true) {
-            try {
-                for (int i = 0; i < objectString.length(); i++) {
-                    if ((int) objectString.charAt(i) > 127) {   // if ascii code is bigger than 127
-                        newString += hex(ord((org.python.types.Str) next(newObject, null)));
-                    } else {
-                        newString += repr(next(newObject, null));
-                    }
+        try {
+            for (int i = 0; i < objectString.length(); i++) {
+                if ((int) objectString.charAt(i) > 127) {   // if ascii code is bigger than 127
+                    newString += hex(ord((org.python.types.Str) next(newObject, null)));
+                } else {
+                    newString += repr(next(newObject, null));
                 }
-            } catch (org.python.exceptions.StopIteration e) {
-                throw new org.python.exceptions.StopIteration();
-                break;
             }
+        } catch (org.python.exceptions.StopIteration e) {
+            throw new org.python.exceptions.StopIteration();
         }
         return (new org.python.types.Str(newString));
     }
