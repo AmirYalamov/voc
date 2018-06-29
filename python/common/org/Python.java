@@ -423,7 +423,27 @@ public class Python {
             args = {"object"}
     )
     public static org.python.types.Str ascii(org.python.Object object) {
-        throw new org.python.exceptions.NotImplementedError("Builtin function 'ascii' not implemented");
+        //throw new org.python.exceptions.NotImplementedError("Builtin function 'ascii' not implemented");
+
+        org.python.Object newObject = iter(object);    // makes newObject a printable version of object
+        String objectString = object.toString();
+        String newString;
+
+        while (true) {
+            try {
+                for (int i = 0; i < objectString.length(); i++) {
+                    if ((int) objectString.charAt(i) > 127) {   // if ascii code is bigger than 127
+                        newString += hex(ord((org.python.types.Str) next(newObject, null)));
+                    } else {
+                        newString += repr(next(newObject, null));
+                    }
+                }
+            } catch (org.python.exceptions.StopIteration e) {
+                throw new org.python.exceptions.StopIteration();
+                break;
+            }
+        }
+        return (new org.python.types.Str(newString));
     }
 
     @org.python.Method(
